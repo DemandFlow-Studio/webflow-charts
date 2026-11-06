@@ -1,0 +1,67 @@
+# Publishes every released version to GitHub Pages:
+#   https://demandflow-studio.github.io/webflow-charts/v1/charts.js   latest 1.x (what sites load)
+#   https://demandflow-studio.github.io/webflow-charts/1.2.2/charts.js  one exact version
+# Each folder has charts.css, charts.js and minified charts.min.css, charts.min.js.
+# Runs when a version tag (v1.2.3) is pushed, or by hand from the Actions tab.
+name: Publish to GitHub Pages
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build one folder per version, plus vN = latest of each major
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          for tag in $(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=v:refname); do
+            v="${tag#v}"
+            case "$v" in *-*) continue ;; esac   # skip pre-releases
+            dir="_site/$v"
+            mkdir -p "$dir"
+            git show "$tag:charts.css" > "$dir/charts.css"
+            git show "$tag:charts.js" > "$dir/charts.js"
+            npx --yes esbuild@0.24.0 "$dir/charts.css" --minify --outfile="$dir/charts.min.css" --log-level=warning
+            npx --yes esbuild@0.24.0 "$dir/charts.js" --minify --outfile="$dir/charts.min.js" --log-level=warning
+            major="v${v%%.*}"
+            mkdir -p "_site/$major"
+            cp "$dir"/charts.* "_site/$major/"   # tags are sorted, so the last one per major wins
+            echo "$v" > "_site/$major/VERSION"
+          done
+          cat > _site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><title>Webflow Charts</title>
+          <p>Chart files for Webflow sites by Demandflow. See <a href="https://github.com/DemandFlow-Studio/webflow-charts">the repository</a>.</p>
+          HTML
+          ls -R _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
