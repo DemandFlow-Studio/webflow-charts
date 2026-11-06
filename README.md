@@ -11,11 +11,14 @@ Chart types: horizontal bars, columns, stacked bars, grouped bars, line, donut.
 **Site settings → Custom code → Head:**
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.css"></noscript>
 <style>
   /* brand variables, see below */
 </style>
 ```
+
+The stylesheet loads without blocking the page; the script is deferred. If the CDN is down, charts show their data table (no CSS) or stay static (no JS); the rest of the page is unaffected.
 
 **Site settings → Custom code → Footer (before `</body>`):**
 
@@ -32,7 +35,8 @@ Set these on `:root` in the Head code, ideally pointing at the site's Webflow va
 | Variable | Used for |
 |---|---|
 | `--chart-color-1` … `--chart-color-6` | Series colours, in this order |
-| `--chart-on-color-1` … `--chart-on-color-6` | Text on top of each series colour |
+| `--chart-color-7` … `--chart-color-12` | Optional second row for charts with 7–12 parts: lighter/darker shades of colours 1–6, ordered so neighbours never share a hue. Derived from 1–6 when not set |
+| `--chart-on-color-1` … `--chart-on-color-12` | Text on top of each series colour |
 | `--chart-accent`, `--chart-on-accent` | Highlighted bar and its text |
 | `--chart-ink`, `--chart-muted` | Main and secondary text |
 | `--chart-border`, `--chart-grid`, `--chart-track`, `--chart-surface` | Card border, grid lines, empty track, card background |

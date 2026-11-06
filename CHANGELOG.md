@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 — 2026-11-06
+
+- Colours 7–12 (`--chart-color-7` … `--chart-color-12`, `--chart-on-color-7` … `12`) for charts with up to 12 parts. Optional: without them they are derived from colours 1–6.
+- Stacked bars: segments shrink to fit the 2px gaps (the last segment no longer overflows with many parts); on mobile, values on segments under 14% are hidden (still in the tooltip).
+
 ## 1.0.0 — 2026-11-06
 
 First release.

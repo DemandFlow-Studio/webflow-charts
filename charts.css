@@ -1,4 +1,4 @@
-/*! Demandflow Charts v1.0.0 — generic chart styles.
+/*! Demandflow Charts v1.1.0 — generic chart styles.
  * Brand values come from CSS variables set on the client site (see brands/).
  * Every selector starts with .chart[data-chart] so it beats Webflow rich text
  * rules (.w-richtext figure, .w-richtext figure div, .text-rich-text p).
@@ -15,6 +15,14 @@
   --_s4: var(--chart-color-4, #d1d5db);
   --_s5: var(--chart-color-5, #6b7280);
   --_s6: var(--chart-color-6, #374151);
+  /* colours 7–12, for charts with more than 6 parts: a second row of shades. Without brand
+     values they are lighter tints of colours 1–6 */
+  --_s7: var(--chart-color-7, color-mix(in oklab, var(--_s1) 55%, #fff));
+  --_s8: var(--chart-color-8, color-mix(in oklab, var(--_s2) 55%, #000));
+  --_s9: var(--chart-color-9, color-mix(in oklab, var(--_s3) 55%, #fff));
+  --_s10: var(--chart-color-10, color-mix(in oklab, var(--_s4) 55%, #000));
+  --_s11: var(--chart-color-11, color-mix(in oklab, var(--_s5) 55%, #fff));
+  --_s12: var(--chart-color-12, color-mix(in oklab, var(--_s6) 55%, #000));
   /* text on top of each series colour */
   --_on1: var(--chart-on-color-1, #fff);
   --_on2: var(--chart-on-color-2, #111827);
@@ -22,6 +30,12 @@
   --_on4: var(--chart-on-color-4, #111827);
   --_on5: var(--chart-on-color-5, #fff);
   --_on6: var(--chart-on-color-6, #fff);
+  --_on7: var(--chart-on-color-7, #111827);
+  --_on8: var(--chart-on-color-8, #fff);
+  --_on9: var(--chart-on-color-9, #111827);
+  --_on10: var(--chart-on-color-10, #fff);
+  --_on11: var(--chart-on-color-11, #111827);
+  --_on12: var(--chart-on-color-12, #fff);
   --_accent: var(--chart-accent, #111827);
   --_on-accent: var(--chart-on-accent, #fff);
   --_ink: var(--chart-ink, #1f2937);
@@ -60,6 +74,12 @@
 .chart[data-chart] .is-s4 { --c: var(--_s4); --on: var(--_on4); }
 .chart[data-chart] .is-s5 { --c: var(--_s5); --on: var(--_on5); }
 .chart[data-chart] .is-s6 { --c: var(--_s6); --on: var(--_on6); }
+.chart[data-chart] .is-s7 { --c: var(--_s7); --on: var(--_on7); }
+.chart[data-chart] .is-s8 { --c: var(--_s8); --on: var(--_on8); }
+.chart[data-chart] .is-s9 { --c: var(--_s9); --on: var(--_on9); }
+.chart[data-chart] .is-s10 { --c: var(--_s10); --on: var(--_on10); }
+.chart[data-chart] .is-s11 { --c: var(--_s11); --on: var(--_on11); }
+.chart[data-chart] .is-s12 { --c: var(--_s12); --on: var(--_on12); }
 
 /* ---------- title, description, note (textPlacement "inside", the default) ---------- */
 .chart[data-chart] > .chart_head { margin: 0 0 1.75rem; text-align: left; }
@@ -142,7 +162,7 @@
 .chart[data-chart] .chart_srow .chart_label { text-align: right; }
 .chart[data-chart] .chart_strack { display: flex; height: 2.25rem; gap: 2px; border-radius: 0 .625rem .625rem 0; overflow: hidden; }
 .chart[data-chart] .chart_seg {
-  display: flex; align-items: center; justify-content: center; flex: 0 0 calc(var(--v) * 100%);
+  display: flex; align-items: center; justify-content: center; flex: 0 1 calc(var(--v) * 100%); min-width: 0;
   background: var(--c); color: var(--on); overflow: hidden;
 }
 .chart[data-chart] .chart_seg .chart_value { font-size: .9375rem; }
@@ -251,6 +271,7 @@
 
 /* ---------- responsive ---------- */
 @media (max-width: 767px) {
+  .chart[data-chart] .chart_seg.is-tight .chart_value { display: none; }
   .chart[data-chart] { padding: 1.25rem; }
   .chart[data-chart] .chart_title { font-size: 1.25rem; }
   .chart[data-chart] .chart_bar,
