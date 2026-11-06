@@ -1,0 +1,277 @@
+/*! Demandflow Charts v1.0.0 — generic chart styles.
+ * Brand values come from CSS variables set on the client site (see brands/).
+ * Every selector starts with .chart[data-chart] so it beats Webflow rich text
+ * rules (.w-richtext figure, .w-richtext figure div, .text-rich-text p).
+ * Missing brand variables fall back to neutral greys.
+ * Title, description and note sit inside the card by default; with textPlacement "outside"
+ * they are plain rich text around the embed, styled by the site.
+ */
+
+.chart[data-chart] {
+  /* categorical series colours */
+  --_s1: var(--chart-color-1, #4b5563);
+  --_s2: var(--chart-color-2, #9ca3af);
+  --_s3: var(--chart-color-3, #1f2937);
+  --_s4: var(--chart-color-4, #d1d5db);
+  --_s5: var(--chart-color-5, #6b7280);
+  --_s6: var(--chart-color-6, #374151);
+  /* text on top of each series colour */
+  --_on1: var(--chart-on-color-1, #fff);
+  --_on2: var(--chart-on-color-2, #111827);
+  --_on3: var(--chart-on-color-3, #fff);
+  --_on4: var(--chart-on-color-4, #111827);
+  --_on5: var(--chart-on-color-5, #fff);
+  --_on6: var(--chart-on-color-6, #fff);
+  --_accent: var(--chart-accent, #111827);
+  --_on-accent: var(--chart-on-accent, #fff);
+  --_ink: var(--chart-ink, #1f2937);
+  --_muted: var(--chart-muted, #6b7280);
+  --_border: var(--chart-border, #e5e7eb);
+  --_grid: var(--chart-grid, #eef0f2);
+  --_track: var(--chart-track, #f3f4f6);
+  --_surface: var(--chart-surface, #fff);
+  --_tip-bg: var(--chart-tooltip-bg, #1f2937);
+  --_tip-ink: var(--chart-tooltip-ink, #fff);
+  --_font-heading: var(--chart-font-heading, inherit);
+  --_font-body: var(--chart-font-body, inherit);
+  --_radius: var(--chart-radius, 1.5rem);
+  --_ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  max-width: none;
+  margin: 2rem 0;
+  padding: 2rem;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius);
+  background: var(--_surface);
+  color: var(--_ink);
+  font-family: var(--_font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: left;
+}
+/* Webflow hides text in figure divs (image captions); undo it for charts */
+.chart[data-chart] div { color: inherit; font-size: inherit; }
+.chart[data-chart] p { margin: 0; }
+
+.chart[data-chart] .is-s1 { --c: var(--_s1); --on: var(--_on1); }
+.chart[data-chart] .is-s2 { --c: var(--_s2); --on: var(--_on2); }
+.chart[data-chart] .is-s3 { --c: var(--_s3); --on: var(--_on3); }
+.chart[data-chart] .is-s4 { --c: var(--_s4); --on: var(--_on4); }
+.chart[data-chart] .is-s5 { --c: var(--_s5); --on: var(--_on5); }
+.chart[data-chart] .is-s6 { --c: var(--_s6); --on: var(--_on6); }
+
+/* ---------- title, description, note (textPlacement "inside", the default) ---------- */
+.chart[data-chart] > .chart_head { margin: 0 0 1.75rem; text-align: left; }
+.chart[data-chart] .chart_title {
+  font-family: var(--_font-heading); font-size: 1.5rem; line-height: 1.2; letter-spacing: -.02em; font-weight: 500; color: var(--_ink);
+}
+.chart[data-chart] .chart_sub { margin-top: .375rem; font-size: 1rem; color: var(--_muted); }
+.chart[data-chart] .chart_note { margin-top: 1.5rem; font-size: .8125rem; font-style: italic; color: var(--_muted); }
+.chart[data-chart] .chart_note a { color: inherit; }
+
+/* ---------- legend ---------- */
+.chart[data-chart] .chart_legend { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: 0 0 1.25rem; font-size: .875rem; color: var(--_muted); }
+.chart[data-chart] .chart_key { display: inline-flex; align-items: center; gap: .5rem; }
+.chart[data-chart] .chart_swatch { width: .75rem; aspect-ratio: 1; border-radius: .2rem; background: var(--c); flex-shrink: 0; }
+
+/* table: the accessible and SEO copy of the data; visually hidden while the chart renders */
+.chart[data-chart] .chart_table {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+/* production fallback (JS adds .is-fallback when a chart is broken): show the table instead */
+.chart[data-chart].is-fallback .chart_plot,
+.chart[data-chart].is-fallback .chart_legend { display: none; }
+.chart[data-chart].is-fallback .chart_table {
+  position: static; width: 100%; height: auto; overflow: visible; clip-path: none; white-space: normal;
+  border-collapse: collapse; font-size: .9375rem;
+}
+.chart[data-chart].is-fallback .chart_table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.chart[data-chart].is-fallback .chart_table th,
+.chart[data-chart].is-fallback .chart_table td { padding: .625rem .5rem .625rem 0; border-bottom: 1px solid var(--_border); text-align: left; font-weight: 400; }
+.chart[data-chart].is-fallback .chart_table thead th { font-size: .8125rem; font-weight: 600; color: var(--_muted); }
+.chart[data-chart].is-fallback .chart_table td { text-align: right; font-variant-numeric: tabular-nums; }
+
+.chart[data-chart] .chart_value {
+  font-family: var(--_font-heading); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.chart[data-chart] .chart_label { font-size: .9375rem; line-height: 1.3; }
+
+/* hover / tooltip focus: dim everything that isn't active */
+.chart[data-chart] [data-r] { transition: opacity .25s ease, filter .2s ease; }
+.chart[data-chart].has-active [data-r]:not(.is-active) { opacity: .35; }
+.chart[data-chart] [data-r].is-active { filter: brightness(1.08); }
+.chart[data-chart].has-active .chart_line [data-r] { opacity: 1; }
+
+/* ---------- bar (horizontal) ---------- */
+.chart[data-chart] .chart_bars { display: grid; }
+.chart[data-chart] .chart_bar {
+  display: grid; grid-template-columns: minmax(8rem, 36%) 1fr; align-items: center; gap: 1rem; padding: .25rem 0;
+}
+.chart[data-chart] .chart_bar .chart_label { text-align: right; }
+.chart[data-chart] .chart_track { position: relative; display: block; height: 2.25rem; border-left: 1px solid var(--_border); }
+.chart[data-chart] .chart_fill {
+  display: flex; align-items: center; justify-content: flex-end; height: 100%;
+  width: calc(var(--v) * 100%); min-width: 3rem; padding: 0 .75rem; box-sizing: border-box;
+  border-radius: 0 .625rem .625rem 0; background: var(--_s1); transform-origin: left center;
+}
+.chart[data-chart] .chart_bar .chart_value { color: var(--_on1); font-size: 1.0625rem; }
+.chart[data-chart] .chart_bar.is-highlight .chart_fill { background: var(--_accent); }
+.chart[data-chart] .chart_bar.is-highlight .chart_value { color: var(--_on-accent); }
+.chart[data-chart] .chart_bar.is-small .chart_fill { position: relative; min-width: .75rem; padding: 0; }
+.chart[data-chart] .chart_bar.is-small .chart_value { position: absolute; left: calc(100% + .5rem); color: var(--_ink); }
+
+/* ---------- column (vertical) ---------- */
+.chart[data-chart] .chart_cols {
+  display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: .75rem; align-items: end;
+  height: 16rem; border-bottom: 1px solid var(--_border);
+}
+.chart[data-chart] .chart_col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.chart[data-chart] .chart_col .chart_value { margin-bottom: .375rem; font-size: 1rem; }
+.chart[data-chart] .chart_colfill {
+  display: block; width: 100%; max-width: 4.5rem; height: calc(var(--v) * (100% - 1.875rem)); min-height: .25rem;
+  border-radius: .625rem .625rem 0 0; background: var(--_s1); transform-origin: bottom center;
+}
+.chart[data-chart] .chart_col.is-highlight .chart_colfill { background: var(--_accent); }
+.chart[data-chart] .chart_collabels { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: .75rem; margin-top: .625rem; }
+.chart[data-chart] .chart_collabels .chart_label { text-align: center; font-size: .875rem; color: var(--_muted); overflow-wrap: anywhere; }
+
+/* ---------- stacked (horizontal) ---------- */
+.chart[data-chart] .chart_stacked { display: grid; }
+.chart[data-chart] .chart_srow { display: grid; grid-template-columns: minmax(8rem, 30%) 1fr; align-items: center; gap: 1rem; padding: .25rem 0; }
+.chart[data-chart] .chart_srow .chart_label { text-align: right; }
+.chart[data-chart] .chart_strack { display: flex; height: 2.25rem; gap: 2px; border-radius: 0 .625rem .625rem 0; overflow: hidden; }
+.chart[data-chart] .chart_seg {
+  display: flex; align-items: center; justify-content: center; flex: 0 0 calc(var(--v) * 100%);
+  background: var(--c); color: var(--on); overflow: hidden;
+}
+.chart[data-chart] .chart_seg .chart_value { font-size: .9375rem; }
+.chart[data-chart] .chart_seg.is-narrow .chart_value { display: none; }
+
+/* ---------- grouped (horizontal) ---------- */
+.chart[data-chart] .chart_grouped { display: grid; gap: .75rem; }
+.chart[data-chart] .chart_grow { display: grid; grid-template-columns: minmax(8rem, 30%) 1fr; align-items: center; gap: 1rem; }
+.chart[data-chart] .chart_grow .chart_label { text-align: right; }
+.chart[data-chart] .chart_gbars { display: grid; gap: 2px; border-left: 1px solid var(--_border); }
+.chart[data-chart] .chart_gbar { display: flex; align-items: center; gap: .5rem; padding: 1px 0; }
+.chart[data-chart] .chart_gfill {
+  display: block; height: 1.375rem; width: calc(var(--v) * (100% - 4rem)); min-width: 2px;
+  border-radius: 0 .375rem .375rem 0; background: var(--c); transform-origin: left center;
+}
+.chart[data-chart] .chart_gbar .chart_value { font-size: .875rem; }
+
+/* ---------- line ---------- */
+.chart[data-chart] .chart_line {
+  display: grid; grid-template-columns: auto 1fr; grid-template-rows: 16rem auto; column-gap: .75rem;
+}
+.chart[data-chart] .chart_yaxis { position: relative; grid-row: 1; min-width: 2.5rem; }
+.chart[data-chart] .chart_ytick {
+  position: absolute; right: 0; bottom: calc(var(--y) * 100%); transform: translateY(50%);
+  font-size: .75rem; color: var(--_muted); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.chart[data-chart] .chart_lineplot { position: relative; grid-row: 1; grid-column: 2; }
+.chart[data-chart] .chart_line .chart_svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.chart[data-chart] .chart_grid { stroke: var(--_grid); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.chart[data-chart] .chart_path {
+  fill: none; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke;
+}
+.chart[data-chart] .chart_pt {
+  position: absolute; left: calc(var(--x) * 100%); bottom: calc(var(--y) * 100%); width: .625rem; aspect-ratio: 1;
+  border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--_surface); transform: translate(-50%, 50%);
+}
+.chart[data-chart] .chart_pt.is-active { width: .875rem; }
+.chart[data-chart] .chart_cross {
+  position: absolute; top: 0; bottom: 0; left: calc(var(--cx, 0) * 100%); width: 1px; background: var(--_border);
+  opacity: 0; transition: opacity .15s ease, left .25s var(--_ease); pointer-events: none;
+}
+.chart[data-chart].has-active .chart_cross { opacity: 1; }
+.chart[data-chart] .chart_xaxis { position: relative; grid-column: 2; height: 1.75rem; margin-top: .5rem; }
+.chart[data-chart] .chart_xtick {
+  position: absolute; left: calc(var(--x) * 100%); transform: translateX(-50%);
+  font-size: .75rem; color: var(--_muted); white-space: nowrap;
+}
+.chart[data-chart] .chart_xtick:first-child { transform: none; }
+.chart[data-chart] .chart_xtick:last-child { transform: translateX(-100%); }
+
+/* ---------- donut ---------- */
+.chart[data-chart] .chart_donut { display: grid; grid-template-columns: minmax(10rem, 16rem) 1fr; align-items: center; gap: 2rem; }
+.chart[data-chart] .chart_ring { position: relative; aspect-ratio: 1; }
+.chart[data-chart] .chart_donut .chart_svg { display: block; width: 100%; height: 100%; transform: rotate(0); overflow: visible; }
+.chart[data-chart] .chart_arc { fill: none; stroke: var(--c); stroke-width: 6; pointer-events: stroke; }
+.chart[data-chart] .chart_center {
+  position: absolute; inset: 0; pointer-events: none; /* let the pointer reach the arcs underneath */ display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.chart[data-chart] .chart_center-value { font-family: var(--_font-heading); font-size: 2rem; font-weight: 600; line-height: 1; }
+.chart[data-chart] .chart_center-label { margin-top: .25rem; font-size: .8125rem; color: var(--_muted); }
+.chart[data-chart] .chart_legend.is-donut { flex-direction: column; gap: .625rem; margin: 0; font-size: .9375rem; color: var(--_ink); }
+.chart[data-chart] .chart_legend.is-donut .chart_key { display: grid; grid-template-columns: auto 1fr auto; gap: .625rem; }
+.chart[data-chart] .chart_key-value { font-family: var(--_font-heading); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------- tooltip (created by JS) ---------- */
+.chart[data-chart] .chart_tip {
+  position: absolute; top: 0; left: 0; z-index: 2; pointer-events: none; max-width: 16rem;
+  padding: .5rem .75rem; border-radius: .625rem; background: var(--_tip-bg); color: var(--_tip-ink);
+  font-size: .8125rem; line-height: 1.35; opacity: 0; scale: .96; transform-origin: bottom center;
+  transition: opacity .15s ease, scale .15s ease, translate .25s var(--_ease);
+}
+.chart[data-chart] .chart_tip.is-jump { transition: opacity .15s ease, scale .15s ease; }
+.chart[data-chart] .chart_tip.is-on { opacity: 1; scale: 1; }
+.chart[data-chart] .chart_tip strong { display: block; font-family: var(--_font-heading); font-size: 1rem; font-weight: 600; }
+.chart[data-chart] .chart_tip-row { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
+.chart[data-chart] .chart_tip-row b { margin-left: auto; padding-left: .75rem; font-weight: 600; }
+.chart[data-chart] .chart_tip .chart_swatch { width: .5rem; }
+
+/* ---------- problems (classes set by JS) ---------- */
+/* production: a broken chart whose table is broken too is removed from the page */
+.chart[data-chart].is-hidden { display: none; }
+/* staging / debug: mark the chart that has a problem */
+.chart[data-chart].has-problem { outline: 2px dashed #d92d20; outline-offset: 4px; }
+
+.chart-alert {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 2147483000; width: min(28rem, calc(100vw - 2rem)); max-height: 50vh; overflow: auto;
+  padding: 1rem 1.125rem; border: 1px solid #fda29b; border-radius: .75rem; background: #fef3f2; color: #7a271a;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, .12); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; text-align: left;
+}
+.chart-alert_head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.chart-alert_close { border: 0; background: none; color: inherit; font-size: 1.25rem; line-height: 1; cursor: pointer; padding: 0; }
+.chart-alert_list { margin: .625rem 0 0; padding: 0 0 0 1.125rem; }
+.chart-alert_list li { margin: .25rem 0; }
+.chart-alert_id { border: 0; padding: 0; background: none; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+.chart-alert_foot { margin: .625rem 0 0; font-size: 12px; opacity: .8; }
+
+/* ---------- entrance: hidden only while JS says the chart is waiting ---------- */
+.chart[data-chart].is-waiting .chart_fill,
+.chart[data-chart].is-waiting .chart_gfill { transform: scaleX(0); }
+.chart[data-chart].is-waiting .chart_colfill { transform: scaleY(0); }
+.chart[data-chart].is-waiting .chart_strack { clip-path: inset(0 100% 0 0); }
+.chart[data-chart].is-waiting .chart_line .chart_svg { clip-path: inset(0 100% 0 0); }
+.chart[data-chart].is-waiting .chart_pt,
+.chart[data-chart].is-waiting .chart_value { opacity: 0; }
+.chart[data-chart].is-waiting .chart_arc { stroke-dasharray: 0 100; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 767px) {
+  .chart[data-chart] { padding: 1.25rem; }
+  .chart[data-chart] .chart_title { font-size: 1.25rem; }
+  .chart[data-chart] .chart_bar,
+  .chart[data-chart] .chart_srow,
+  .chart[data-chart] .chart_grow { grid-template-columns: 1fr; gap: .375rem; }
+  .chart[data-chart] .chart_bar .chart_label,
+  .chart[data-chart] .chart_srow .chart_label,
+  .chart[data-chart] .chart_grow .chart_label { text-align: left; }
+  .chart[data-chart] .chart_track,
+  .chart[data-chart] .chart_strack { height: 2rem; }
+  .chart[data-chart] .chart_cols,
+  .chart[data-chart] .chart_collabels { gap: .375rem; }
+  .chart[data-chart] .chart_cols { height: 12rem; }
+  .chart[data-chart] .chart_line { grid-template-rows: 12rem auto; }
+  .chart[data-chart] .chart_donut { grid-template-columns: 1fr; justify-items: center; }
+  .chart[data-chart] .chart_ring { width: min(100%, 14rem); }
+  .chart[data-chart] .chart_legend.is-donut { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart[data-chart] [data-r],
+  .chart[data-chart] .chart_tip,
+  .chart[data-chart] .chart_cross { transition: none; }
+}
