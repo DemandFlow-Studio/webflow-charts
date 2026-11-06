@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — 2026-11-06
+
+Webflow strips `<svg>` from rich text embeds when they are saved (found on the first CMS write), so donut and line charts arrived without their rings and lines.
+
+- Donut arcs and line paths now ship as empty `<span>`s with their geometry in data attributes (`.chart_arcdata`, `.chart_pathdata`); the script draws the SVG (and the line grid) on load. Embeds that already contain an SVG still work.
+- Without JS, a donut shows the same ring as a CSS conic-gradient (`--ring` on `.chart_ring`); a line chart shows its points.
+- The hidden data table sits in a 1px clipping box (`.chart_data`), so a long table can no longer widen the card. Embeds without the wrapper keep the old rule.
+
 ## 1.1.0 — 2026-11-06
 
 - Colours 7–12 (`--chart-color-7` … `--chart-color-12`, `--chart-on-color-7` … `12`) for charts with up to 12 parts. Optional: without them they are derived from colours 1–6.

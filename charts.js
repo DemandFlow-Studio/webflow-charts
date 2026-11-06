@@ -1,11 +1,11 @@
-/*! Demandflow Charts v1.1.0 — animates and adds tooltips to chart embeds.
+/*! Demandflow Charts v1.2.0 — animates and adds tooltips to chart embeds.
  * The chart HTML is complete without this script (data + table are static).
  * Each chart initialises once, and a failure in one chart never stops the others.
  */
 (() => {
   'use strict';
 
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
   const DURATION = 900;
   const STAGGER = 70;
@@ -269,10 +269,53 @@
     else if (!debug) chart.classList.add('is-hidden');
   };
 
+  // ---------- SVG: Webflow strips <svg> from rich text embeds, so donut arcs and line paths ship as
+  // empty spans with their geometry in data attributes, and are drawn here before anything else ----------
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svgEl = (tag, attrs) => {
+    const el = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+    return el;
+  };
+  const drawSvg = (chart, type) => {
+    if (type === 'donut') {
+      const ring = chart.querySelector('.chart_ring');
+      const data = ring ? [...ring.querySelectorAll('.chart_arcdata')] : [];
+      if (!data.length || ring.querySelector('svg')) return;
+      const svg = svgEl('svg', { class: 'chart_svg', viewBox: '0 0 42 42', focusable: 'false' });
+      data.forEach((d) => {
+        svg.append(svgEl('circle', {
+          class: d.className.replace('chart_arcdata', 'chart_arc'), 'data-r': d.dataset.r || '',
+          cx: 21, cy: 21, r: 15.9155, pathLength: 100,
+          'stroke-dasharray': d.dataset.dash || '', 'stroke-dashoffset': d.dataset.offset || '',
+        }));
+        d.remove();
+      });
+      ring.prepend(svg);
+      ring.classList.add('is-drawn');
+    }
+    if (type === 'line') {
+      const plot = chart.querySelector('.chart_lineplot');
+      const data = plot ? [...plot.querySelectorAll('.chart_pathdata')] : [];
+      if (!data.length || plot.querySelector('svg')) return;
+      const svg = svgEl('svg', { class: 'chart_svg', viewBox: '0 0 1000 1000', preserveAspectRatio: 'none', focusable: 'false' });
+      chart.querySelectorAll('.chart_ytick').forEach((t) => {
+        const y = 1000 - (parseFloat(cssVar(t, '--y')) || 0) * 1000;
+        svg.append(svgEl('line', { class: 'chart_grid', x1: 0, x2: 1000, y1: y, y2: y }));
+      });
+      data.forEach((d) => {
+        svg.append(svgEl('path', { class: d.className.replace('chart_pathdata', 'chart_path'), d: d.dataset.d || '' }));
+        d.remove();
+      });
+      plot.prepend(svg);
+    }
+  };
+
   const initChart = (chart, debug) => {
     if (chart.dataset.jsInit) return;
     chart.dataset.jsInit = 'true';
     const type = chart.dataset.chart;
+    drawSvg(chart, type);
     if (!chart.dataset.chartId) report(chart, 'chart has no data-chart-id');
     const tableErrors = checkTable(chart);
     const table = tableErrors.length ? null : readTable(chart);
