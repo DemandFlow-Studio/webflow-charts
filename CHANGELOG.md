@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2 — 2026-11-06
+
+- Links in the chart note get a hover colour: `--chart-link-hover` (optional brand variable), else the main text colour.
+
 ## 1.2.1 — 2026-11-06
 
 - Tooltip value was invisible on sites that colour `strong` inside rich text with `!important`: the tooltip now uses its own spans (`.chart_tip-value`, `.chart_tip-num`).

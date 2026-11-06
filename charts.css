@@ -1,4 +1,4 @@
-/*! Demandflow Charts v1.2.1 — generic chart styles.
+/*! Demandflow Charts v1.2.2 — generic chart styles.
  * Brand values come from CSS variables set on the client site (see brands/).
  * Every selector starts with .chart[data-chart] so it beats Webflow rich text
  * rules (.w-richtext figure, .w-richtext figure div, .text-rich-text p).
@@ -88,7 +88,8 @@
 }
 .chart[data-chart] .chart_sub { margin-top: .375rem; font-size: 1rem; color: var(--_muted); }
 .chart[data-chart] .chart_note { margin-top: 1.5rem; font-size: .8125rem; font-style: italic; color: var(--_muted); }
-.chart[data-chart] .chart_note a { color: inherit; }
+.chart[data-chart] .chart_note a { color: inherit; text-decoration: underline; transition: color .2s; }
+.chart[data-chart] .chart_note a:hover { color: var(--chart-link-hover, var(--_ink)); }
 
 /* ---------- legend ---------- */
 .chart[data-chart] .chart_legend { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: 0 0 1.25rem; font-size: .875rem; color: var(--_muted); }

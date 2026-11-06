@@ -41,6 +41,7 @@ Set these on `:root` in the Head code, ideally pointing at the site's Webflow va
 | `--chart-ink`, `--chart-muted` | Main and secondary text |
 | `--chart-border`, `--chart-grid`, `--chart-track`, `--chart-surface` | Card border, grid lines, empty track, card background |
 | `--chart-tooltip-bg`, `--chart-tooltip-ink` | Tooltip |
+| `--chart-link-hover` | Optional: hover colour of links in the chart note (default: main text colour) |
 | `--chart-font-heading`, `--chart-font-body` | Fonts |
 | `--chart-radius` | Card corner radius |
 

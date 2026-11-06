@@ -1,11 +1,11 @@
-/*! Demandflow Charts v1.2.1 — animates and adds tooltips to chart embeds.
+/*! Demandflow Charts v1.2.2 — animates and adds tooltips to chart embeds.
  * The chart HTML is complete without this script (data + table are static).
  * Each chart initialises once, and a failure in one chart never stops the others.
  */
 (() => {
   'use strict';
 
-  const VERSION = '1.2.1';
+  const VERSION = '1.2.2';
   const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
   const DURATION = 900;
   const STAGGER = 70;
