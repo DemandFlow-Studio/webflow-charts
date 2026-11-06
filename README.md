@@ -11,22 +11,22 @@ Chart types: horizontal bars, columns, stacked bars, grouped bars, line, donut.
 **Site settings → Custom code → Head:**
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.css"></noscript>
+<link rel="stylesheet" href="https://demandflow-studio.github.io/webflow-charts/v1/charts.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://demandflow-studio.github.io/webflow-charts/v1/charts.min.css"></noscript>
 <style>
   /* brand variables, see below */
 </style>
 ```
 
-The stylesheet loads without blocking the page; the script is deferred. If the CDN is down, charts show their data table (no CSS) or stay static (no JS); the rest of the page is unaffected.
+The stylesheet loads without blocking the page; the script is deferred. If the files can't be loaded, charts show their data table (no CSS) or stay static (no JS); the rest of the page is unaffected.
 
 **Site settings → Custom code → Footer (before `</body>`):**
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.js" defer></script>
+<script src="https://demandflow-studio.github.io/webflow-charts/v1/charts.min.js" defer></script>
 ```
 
-Always load an exact version (`@1.2.2`). jsDelivr serves exact versions as immutable, so the CSS and JS on a page always match. A range like `@1` is cached by browsers for up to 7 days, so after a release a visitor can get new JS with old CSS. To update a site, change the version in both links.
+`/v1/` is always the latest 1.x release, published to GitHub Pages by `.github/workflows/pages.yml` when a version tag is pushed. Browsers keep the files for 10 minutes, so a fix reaches every site within minutes and the CSS and JS on a page stay in step; sites never need a version change. Only a breaking release moves to `/v2/`. Exact versions stay online too: `/1.2.2/charts.min.js`.
 
 ## Brand variables
 
@@ -60,4 +60,4 @@ Released versions are git tags (`v1.0.0`). A released tag is never changed or de
 
 ## Handing a site over
 
-When a client leaves, copy the version their site uses (`charts.css` and `charts.js` at that tag) into their Webflow project (Head `<style>` and Footer `<script>`), and remove the jsDelivr links. From then on the site no longer depends on this repository.
+When a client leaves, copy the version their site uses (`charts.css` and `charts.js` at that tag) into their Webflow project (Head `<style>` and Footer `<script>`), and remove the links to demandflow-studio.github.io. From then on the site no longer depends on this repository.
