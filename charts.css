@@ -1,4 +1,4 @@
-/*! Demandflow Charts v1.2.0 — generic chart styles.
+/*! Demandflow Charts v1.2.1 — generic chart styles.
  * Brand values come from CSS variables set on the client site (see brands/).
  * Every selector starts with .chart[data-chart] so it beats Webflow rich text
  * rules (.w-richtext figure, .w-richtext figure div, .text-rich-text p).
@@ -249,9 +249,10 @@
 }
 .chart[data-chart] .chart_tip.is-jump { transition: opacity .15s ease, scale .15s ease; }
 .chart[data-chart] .chart_tip.is-on { opacity: 1; scale: 1; }
-.chart[data-chart] .chart_tip strong { display: block; font-family: var(--_font-heading); font-size: 1rem; font-weight: 600; }
+/* spans, not <strong>/<b>: sites style those inside rich text (Passionfruit: `.text-rich-text strong { color … !important }`) */
+.chart[data-chart] .chart_tip-value { display: block; color: inherit; font-family: var(--_font-heading); font-size: 1rem; font-weight: 600; }
 .chart[data-chart] .chart_tip-row { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
-.chart[data-chart] .chart_tip-row b { margin-left: auto; padding-left: .75rem; font-weight: 600; }
+.chart[data-chart] .chart_tip-num { margin-left: auto; color: inherit; padding-left: .75rem; font-weight: 600; }
 .chart[data-chart] .chart_tip .chart_swatch { width: .5rem; }
 
 /* ---------- problems (classes set by JS) ---------- */

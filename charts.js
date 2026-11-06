@@ -1,11 +1,11 @@
-/*! Demandflow Charts v1.2.0 — animates and adds tooltips to chart embeds.
+/*! Demandflow Charts v1.2.1 — animates and adds tooltips to chart embeds.
  * The chart HTML is complete without this script (data + table are static).
  * Each chart initialises once, and a failure in one chart never stops the others.
  */
 (() => {
   'use strict';
 
-  const VERSION = '1.2.0';
+  const VERSION = '1.2.1';
   const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
   const DURATION = 900;
   const STAGGER = 70;
@@ -147,8 +147,8 @@
         const top = pts.length ? Math.min(...pts.map((p) => p.getBoundingClientRect().top)) : r.top;
         area.style.setProperty('--cx', n > 1 ? i / (n - 1) : 0);
         setActive(chart, `.chart_pt[data-r="${i}"]`);
-        const lines = row.values.map((v, s) => `<span class="chart_tip-row">${swatch(s)}${series[s] ?? ''}<b>${v}</b></span>`).join('');
-        tip.show(`<strong>${row.label}</strong>${lines}`, `r${i}`, r.left + (n > 1 ? i / (n - 1) : 0) * r.width, top);
+        const lines = row.values.map((v, s) => `<span class="chart_tip-row">${swatch(s)}${series[s] ?? ''}<span class="chart_tip-num">${v}</span></span>`).join('');
+        tip.show(`<span class="chart_tip-value">${row.label}</span>${lines}`, `r${i}`, r.left + (n > 1 ? i / (n - 1) : 0) * r.width, top);
       });
       area.addEventListener('pointerleave', leave);
       return;
@@ -158,7 +158,9 @@
     plot.addEventListener('pointermove', (e) => {
       if (e.pointerType !== 'mouse') return;
       const el = e.target.closest(targetSel);
-      if (!el) return;
+      // donut: the hole and the gaps between arcs are not part of any segment, so the tooltip goes away
+      // (bars keep it while the pointer crosses the small gaps between them)
+      if (!el) { if (type === 'donut') leave(); return; }
       const r = Number(el.dataset.r);
       const s = el.dataset.s !== undefined ? Number(el.dataset.s) : null;
       const row = data.rows[r];
@@ -166,10 +168,10 @@
       let html;
       let top;
       if (s === null) {
-        html = `<strong>${row.values[0]}</strong>${row.label}`;
+        html = `<span class="chart_tip-value">${row.values[0]}</span>${row.label}`;
         setActive(chart, `[data-r="${r}"]`);
       } else {
-        html = `<strong>${row.values[s]}</strong><span class="chart_tip-row">${swatch(s)}${series[s] ?? ''}</span>${row.label}`;
+        html = `<span class="chart_tip-value">${row.values[s]}</span><span class="chart_tip-row">${swatch(s)}${series[s] ?? ''}</span>${row.label}`;
         setActive(chart, `[data-r="${r}"][data-s="${s}"]`);
       }
       if (type === 'bar') top = el.querySelector('.chart_track').getBoundingClientRect().top;

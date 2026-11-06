@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1 — 2026-11-06
+
+- Tooltip value was invisible on sites that colour `strong` inside rich text with `!important`: the tooltip now uses its own spans (`.chart_tip-value`, `.chart_tip-num`).
+- Donut: moving the pointer from an arc into the hole now hides the tooltip and the highlight.
+
 ## 1.2.0 — 2026-11-06
 
 Webflow strips `<svg>` from rich text embeds when they are saved (found on the first CMS write), so donut and line charts arrived without their rings and lines.
