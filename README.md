@@ -11,8 +11,8 @@ Chart types: horizontal bars, columns, stacked bars, grouped bars, line, donut.
 **Site settings → Custom code → Head:**
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.css"></noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.css"></noscript>
 <style>
   /* brand variables, see below */
 </style>
@@ -23,10 +23,10 @@ The stylesheet loads without blocking the page; the script is deferred. If the C
 **Site settings → Custom code → Footer (before `</body>`):**
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1/charts.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/DemandFlow-Studio/webflow-charts@1.2.2/charts.min.js" defer></script>
 ```
 
-`@1` loads the latest 1.x release: bug fixes reach every site automatically, breaking changes only ship as 2.0. Pin an exact version (`@1.0.0`) to freeze a site.
+Always load an exact version (`@1.2.2`). jsDelivr serves exact versions as immutable, so the CSS and JS on a page always match. A range like `@1` is cached by browsers for up to 7 days, so after a release a visitor can get new JS with old CSS. To update a site, change the version in both links.
 
 ## Brand variables
 
